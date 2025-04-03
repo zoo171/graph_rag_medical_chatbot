@@ -1,6 +1,6 @@
 import streamlit as st
 import openai
-from api_config import OPENAI_API_KEY
+from api_config import OPENAI_API_KEY, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD, get_neo4j_driver
 from neo4j_graphrag.llm import OpenAILLM
 from neo4j_graphrag.retrievers import Text2CypherRetriever
 from neo4j_graphrag.generation import GraphRAG
@@ -9,17 +9,9 @@ from neo4j import GraphDatabase, basic_auth
 # OpenAI API 설정
 openai.api_key = OPENAI_API_KEY
 
-NEO4J_URI="bolt://222.116.135.165:7687"
-NEO4J_USER="neo4j"
-NEO4J_PASSWORD="med_graph_rag2"
-
-def get_neo4j_driver():
-    return GraphDatabase.driver(NEO4J_URI, auth=basic_auth(NEO4J_USER, NEO4J_PASSWORD))
-
 # Neo4j 연결 (session_state에 저장하여 재사용)
 if "driver" not in st.session_state:
     st.session_state.driver = get_neo4j_driver()
-
 
 # 대화 기록 저장
 if "chat_history" not in st.session_state:
